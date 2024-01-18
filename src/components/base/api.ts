@@ -3,7 +3,11 @@ export type ApiListResponse<Type> = {
     items: Type[]
 };
 
-export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
+export type ApiPostMethods = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+export type ApiError = { 
+    error: string 
+};
 
 export class Api {
     readonly baseUrl: string;
@@ -22,7 +26,7 @@ export class Api {
     protected handleResponse(response: Response): Promise<object> {
         if (response.ok) return response.json();
         else return response.json()
-            .then(data => Promise.reject(data.error ?? response.statusText));
+            .then((data:ApiError) => Promise.reject(data.error ?? response.statusText));
     }
 
     get(uri: string) {
